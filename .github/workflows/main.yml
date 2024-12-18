@@ -1,0 +1,33 @@
+name: Build Binary from Shell Script
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: 检出代码库
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    # Step 2: 安装依赖（shc 编译器）
+    - name: Install SHC
+      run: sudo apt-get update && sudo apt-get install -y shc
+
+    # Step 3: 编译脚本为二进制文件
+    - name: Compile logcatlog.sh
+      run: |
+        chmod +x ./scripts/logcatlog.sh
+        shc -f ./scripts/logcatlog.sh -o ./build/logcatlog
+
+    # Step 4: 上传编译后的二进制文件为构建产物
+    - name: Upload Binary Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: logcatlog-binary
+        path: ./build/logcatlog
