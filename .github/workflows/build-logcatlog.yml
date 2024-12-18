@@ -1,4 +1,4 @@
-name: Build Binary from Shell Script
+name: Build and Upload Binary to Releases
 
 on:
   push:
@@ -22,12 +22,16 @@ jobs:
     # Step 3: 编译脚本为二进制文件
     - name: Compile logcatlog.sh
       run: |
+        mkdir -p build
         chmod +x ./scripts/logcatlog.sh
         shc -f ./scripts/logcatlog.sh -o ./build/logcatlog
 
-    # Step 4: 上传编译后的二进制文件为构建产物
-    - name: Upload Binary Artifact
-      uses: actions/upload-artifact@v3
+    # Step 4: 创建 Release 并上传二进制文件
+    - name: Upload to GitHub Releases
+      uses: ncipollo/release-action@v1
       with:
-        name: logcatlog-binary
-        path: ./build/logcatlog
+        tag: v1.0.0  # 您可以更改为动态版本号
+        release_name: logcatlog Binary v1.0.0
+        draft: false
+        prerelease: false
+        files: ./build/logcatlog
