@@ -26,12 +26,14 @@ jobs:
         chmod +x ./scripts/logcatlog.sh
         shc -f ./scripts/logcatlog.sh -o ./build/logcatlog
 
-    # Step 4: 创建 Release 并上传二进制文件
-    - name: Upload to GitHub Releases
+    # Step 4: 创建 Release 并上传文件
+    - name: Create or Update Release
       uses: ncipollo/release-action@v1
       with:
-        tag: v1.0.0  # 您可以更改为动态版本号
-        release_name: logcatlog Binary v1.0.0
+        tag: v1.0.0
+        name: logcatlog Binary v1.0.0
+        body: |
+          This release includes the compiled binary for logcatlog.sh.
         draft: false
         prerelease: false
-        files: ./build/logcatlog
+        artifacts: ./build/logcatlog
